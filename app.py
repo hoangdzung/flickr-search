@@ -10,9 +10,16 @@ def student():
 def result():
    if request.method == 'POST':
       result = request.form
+      term = ""
+      user = ""
+      group = ""
+      if "term" in result: term = result["term"]
+      if "user" in result: user = result["user"]
+      if "group" in result: group = result["group"]
+
       print(result)
       data = process(result)
-      return render_template("result.html", data = data)
+      return render_template("result.html", data = data, term = term, user=user, group=group)
    else:
       abort(405)
 

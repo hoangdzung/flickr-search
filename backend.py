@@ -30,7 +30,8 @@ for ntype in embeddings:
 def process(results):    
     query_type, neigh_dgl_idxs = parse_data(results)
     print("List of indexes in dgl Graph:", neigh_dgl_idxs)
-
+    if (len(neigh_dgl_idxs)) == 0:
+        return [('static/images/notfound.png', '/', 'Term not found')]
     query_dgl_G = build_query_dgl_graph(query_type, neigh_dgl_idxs)
 
     query_embedding = model(query_dgl_G)[query_type][0].detach().cpu().numpy()
