@@ -1,0 +1,33 @@
+<html>
+
+<head>
+   <title>Flickr Image Search</title>
+   <link href="static/css/style.css" rel="stylesheet">
+      <script src="/static/js/pace.js"></script>
+   <link href="static/css/pace.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div class="header">
+      <form action="http://localhost:5000/result" method="POST">
+         <h1>Find Your Images</h1>
+         <div class="form-box">
+            <select class="search-field category" name="category">
+               <option value="" selected disabled hidden>Choose category</option>
+               <option value="image">Image</option>
+               <!-- <option value="user">User</option>
+               <option value="term">Term</option>
+               <option value="group">Group</option> -->
+            </select>
+            <!-- <input type="text" class="search-field keywords" placeholder="Keywords" name="Keywords" /> -->
+            <input type="text" class="search-field keywords" placeholder="Term" name="term" />
+            <input type="text" class="search-field keywords" placeholder="User" name="user" />
+            <input type="text" class="search-field keywords" placeholder="Group" name="group" />
+            <button type="submit" class="search-btn">Search</button>
+         </div>
+      </form>
+   </div>
+
+</body>
+
+</html>
