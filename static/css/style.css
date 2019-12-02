@@ -1,6 +1,11 @@
 body {
     margin: 0;
     padding: 0;
+    display: block;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 .header
@@ -41,26 +46,34 @@ a {
     padding: 10px;
     border: none;
     /* border-radius: 15px; */
-    outline: none;
+    /* outline: none; */
 }
 
 .category 
 {
-    width: 100px;
+    width: 12.5%;
 }
 
 .keywords
 {
-    width: 300px;
+    width: 23%;
+}
+
+form {
+    width: 80%;
+    text-align: center;
 }
 
 .search-btn
 {
     height: 50px;
-    width: 100px;
+    /* width: 100px; */
+    width: 12.5%;
     background: #ffeb3b;
+    /* padding: 0px 25px; */
     border: none;
     color: #000;
+    text-align: center;
     /* border-radius: 15px; */
 }
 
@@ -71,7 +84,10 @@ a {
 
 .form-box {
     background: rgba(0,0,0,0.5);
-    padding: 20px;
+    padding: 10px 5px;
+    text-align: center;
+    display: block;
+    position: relative;
 }
 
 /* Paste this css to your style sheet file or under head tag */
