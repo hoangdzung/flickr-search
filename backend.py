@@ -18,7 +18,7 @@ try:
     if torch.cuda.is_availabel():
         model = model.cuda()
 except:
-    pass 
+    print("Can't load mode and use cuda")
 
 model.eval()
 
