@@ -62,7 +62,7 @@ def parse_data(results):
         if key == "category":
             query_type = results["category"]
         else:
-            keywords[key] = results[key].lower().split(";")
+            keywords[key] = [i.replace('"','').replace("'",'').strip() for i in results[key].lower().split(";")]
 
     neigh_dgl_idxs = defaultdict(list)
     for ntype, contents in keywords.items():

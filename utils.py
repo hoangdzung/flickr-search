@@ -40,7 +40,7 @@ def load_data(dataset="flickr", features_key='features'):
 
         content = nx_G.nodes[node]['content']
         if len(content) == 1:
-            id2content[node] = content[0].lower()
+            id2content[node] = content[0].lower().replace('"','').replace("'",'').strip()
         elif len(content) == 2:
             id2content[node] = (content[0], content[1]['url'], content[1]['title'])
     
