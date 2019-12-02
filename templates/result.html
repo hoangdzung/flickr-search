@@ -26,8 +26,11 @@
       </form>
    </div>
    <div class="img-col">
-      {% for i, image in images %}
-      <img src={{image}} alt={{ i }} id={{i}} onclick="changeImage()" style="width:80%">
+      {% for src, url, title in data %}
+      <div style="text-align: center">
+         <img src={{src}} alt={{ title }} id={{i}} onclick="changeImage()" style="width:80%">
+         <a href={{url}}>{{title}}</a> 
+      </div>
       {% endfor %}
       <!-- The Modal -->
       <div id="myModal" class="modal">
