@@ -5,11 +5,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class HeteroRGCNLayer(nn.Module):
-    def __init__(self, in_size, out_size, etypes):
+    def __init__(self, G, out_size):
         super(HeteroRGCNLayer, self).__init__()
         # W_r for each relation
         self.weight = nn.ModuleDict({
-                name : nn.Linear(in_size, out_size) for name in etypes
+                # name : nn.Linear(in_size, out_size) for name in etypes
+                etype : nn.Linear(G.nodes[srctype].data["features"].shape[-1], out_size) for srctype, etype, dsttype in G.canonical_etypes
             })
 
     def forward(self, G, feat_dict):
@@ -37,7 +38,7 @@ class HeteroRGCN(nn.Module):
         super(HeteroRGCN, self).__init__()
         # self.layer1 = HeteroRGCNLayer(in_size, hidden_size, G.etypes)
         # self.layer2 = HeteroRGCNLayer(hidden_size, out_size, G.etypes)
-        self.layer = HeteroRGCNLayer(in_size, out_size, G.etypes)
+        self.layer = HeteroRGCNLayer(G, out_size)
 
     def forward(self, G, features_key="features"):
         embed = nn.ParameterDict({ntype : nn.Parameter(G.nodes[ntype].data[features_key], requires_grad=False)

@@ -14,6 +14,7 @@ import os
 
 def load_data(dataset="flickr", features_key='features'):
     # if dataset == 'flickr':
+    features_size = {'image': 256, 'group': 256, 'user': 256, 'term':256 }
     id2entityname = {0:'image', 1:'group',2:'user',3:'term'}
     graph_path = 'data/flickr/flickr-G-formatted.json'
     feats_path = 'data/flickr/flickr-feats.npy'
@@ -91,8 +92,7 @@ def load_data(dataset="flickr", features_key='features'):
 
     dgl_G = dgl.heterograph(edgetype_dict, num_nodes_dict={id2entityname[i]:len(node2id[i]) for i in range(number_of_types)})
     for nodetype in id2entityname.values():
-        dgl_G.nodes[nodetype].data[features_key] = torch.FloatTensor(feats_dict[nodetype])
-
+        dgl_G.nodes[nodetype].data[features_key] = torch.FloatTensor(feats_dict[nodetype][:,:features_size[nodetype]])
     return dgl_G, nx_G, nx2dgl_map, dgl2nx_map, id2content, content2id, feats
 
 
