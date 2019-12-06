@@ -13,12 +13,12 @@ isolate_nodes = set([node for node in nx.isolates(nx_G)])
 print("Load model...")
 model = HeteroRGCN(dgl_G, 256, 64, 32)
 
-try:
-    model.load_state_dict(torch.load('model/firts_norm/model.pt'))
-    if torch.cuda.is_availabel():
-        model = model.cuda()
-except:
-    print("Can't load mode and use cuda")
+#try:
+model.load_state_dict(torch.load('model/firts_norm/model.pt'))
+if torch.cuda.is_availabel():
+    model = model.cuda()
+#except:
+#    print("Can't load mode and use cuda")
 
 model.eval()
 
