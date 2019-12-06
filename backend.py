@@ -6,6 +6,8 @@ import dgl
 import networkx as nx
 import numpy as np 
 
+import config 
+
 features_key = "features"
 dgl_G, nx_G, nx2dgl_map, dgl2nx_map, id2content, content2id, feats, features_size = load_data(features_key=features_key)
 isolate_nodes = set([node for node in nx.isolates(nx_G)])
@@ -14,7 +16,7 @@ print("Load model...")
 model = HeteroRGCN(dgl_G, 256, 64, 32, True)
 
 #try:
-model.load_state_dict(torch.load('model/firts_norm/model.pt'))
+model.load_state_dict(torch.load(config.MODEL_PATH))
 if torch.cuda.is_available():
     model = model.cuda()
 #except:

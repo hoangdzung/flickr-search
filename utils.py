@@ -11,14 +11,16 @@ from tqdm import tqdm
 import random
 import math 
 import os 
+import config 
 
 def load_data(dataset="flickr", features_key='features'):
     # if dataset == 'flickr':
-    #features_size = {'image': 256, 'group': 256, 'user': 256, 'term':256 }
-    features_size = {'image': 512, 'group': 768, 'user': 256, 'term':768 }
+    # features_size = {'image': 256, 'group': 256, 'user': 256, 'term':256 }
+    # features_size = {'image': 512, 'group': 768, 'user': 256, 'term':768 }
+    features_size = config.FEATURES_SIZE
     id2entityname = {0:'image', 1:'group',2:'user',3:'term'}
-    graph_path = 'data/flickr/flickr-G-formatted.json'
-    feats_path = 'data/flickr/flickr-feats.npy'
+    graph_path = config.GRAPH_PATH
+    feats_path = config.FEATS_PATH
     # elif dataset == 'aifb':
     #     id2entityname = {0:'project', 1:'org',2:'person',3:'group', 4:'field',5:'pub',6:'external'}
     #     graph_path = 'data/aifb/aifb-G.json'
