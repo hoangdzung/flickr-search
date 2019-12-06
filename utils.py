@@ -14,7 +14,8 @@ import os
 
 def load_data(dataset="flickr", features_key='features'):
     # if dataset == 'flickr':
-    features_size = {'image': 256, 'group': 256, 'user': 256, 'term':256 }
+    # features_size = {'image': 256, 'group': 256, 'user': 256, 'term':256 }
+    features_size = {'image': 512, 'group': 768, 'user': 256, 'term':768 }
     id2entityname = {0:'image', 1:'group',2:'user',3:'term'}
     graph_path = 'data/flickr/flickr-G-formatted.json'
     feats_path = 'data/flickr/flickr-feats.npy'
