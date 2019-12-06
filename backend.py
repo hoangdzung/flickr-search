@@ -15,14 +15,14 @@ model = HeteroRGCN(dgl_G, 256, 64, 32, True)
 
 #try:
 model.load_state_dict(torch.load('model/firts_norm/model.pt'))
-if torch.cuda.is_availabel():
+if torch.cuda.is_available():
     model = model.cuda()
 #except:
 #    print("Can't load mode and use cuda")
 
 model.eval()
 
-embeddings = model(dgl_G, True)
+embeddings = model(dgl_G, learn_feats=True)
 for ntype in embeddings:
     embeddings[ntype] = embeddings[ntype].detach().cpu().numpy()
     print(ntype, embeddings[ntype].shape)
@@ -34,7 +34,7 @@ def process(results):
         return [('static/images/notfound.png', '/', 'Term not found')]
     query_dgl_G = build_query_dgl_graph(query_type, neigh_dgl_idxs)
 
-    query_embedding = model(query_dgl_G, False)[query_type][0].detach().cpu().numpy()
+    query_embedding = model(query_dgl_G, learn_feats=False)[query_type][0].detach().cpu().numpy()
     
     candidates_nx_id = get_candidates(query_embedding, query_type)
 
@@ -74,6 +74,7 @@ def parse_data(results):
     return query_type, neigh_dgl_idxs
 
 def content2nxid(ntype, content):
+    content = content.lower().replace('"','').replace("'",'').strip()
     try:
         nx_idx = content2id[content]
     except KeyError:
@@ -99,7 +100,7 @@ def build_query_dgl_graph(query_type, neigh_dgl_idxs):
             else:
                 feats_dict[neigh_ntype].append(feats[neigh_id][:features_size[neigh_ntype]])
     
-    feats_dict[query_type] = [np.zeros(feats.shape[-1])]
+    feats_dict[query_type] = [np.zeros(features_size[query_type])]
     query_dgl_G = dgl.heterograph(edges_dict)
 
     for ntype in query_dgl_G.ntypes:
