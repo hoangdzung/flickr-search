@@ -7,11 +7,11 @@ import networkx as nx
 import numpy as np 
 
 features_key = "features"
-dgl_G, nx_G, nx2dgl_map, dgl2nx_map, id2content, content2id, feats = load_data(features_key=features_key)
+dgl_G, nx_G, nx2dgl_map, dgl2nx_map, id2content, content2id, feats, features_size = load_data(features_key=features_key)
 isolate_nodes = set([node for node in nx.isolates(nx_G)])
 
 print("Load model...")
-model = HeteroRGCN(dgl_G, 256, 64, 32)
+model = HeteroRGCN(dgl_G, 256, 64, 32, True)
 
 try:
     model.load_state_dict(torch.load('model/firts_norm/model.pt'))
@@ -22,7 +22,7 @@ except:
 
 model.eval()
 
-embeddings = model(dgl_G)
+embeddings = model(dgl_G, True)
 for ntype in embeddings:
     embeddings[ntype] = embeddings[ntype].detach().cpu().numpy()
     print(ntype, embeddings[ntype].shape)
@@ -34,7 +34,7 @@ def process(results):
         return [('static/images/notfound.png', '/', 'Term not found')]
     query_dgl_G = build_query_dgl_graph(query_type, neigh_dgl_idxs)
 
-    query_embedding = model(query_dgl_G)[query_type][0].detach().cpu().numpy()
+    query_embedding = model(query_dgl_G, False)[query_type][0].detach().cpu().numpy()
     
     candidates_nx_id = get_candidates(query_embedding, query_type)
 
@@ -92,7 +92,12 @@ def build_query_dgl_graph(query_type, neigh_dgl_idxs):
         for i, neigh_id in enumerate(neigh_dgl_idxs[neigh_ntype]):
             edges_dict[(query_type, query_type+'-->'+neigh_ntype, neigh_ntype)].append((0,i))
             edges_dict[(neigh_ntype, neigh_ntype+'-->'+query_type, query_type)].append((i,0))
-            feats_dict[neigh_ntype].append(feats[neigh_id])
+            if neigh_ntype == "user":
+                dgl_user_idx = nx2dgl_map[neigh_id]
+                assert dgl_user_idx[0] == 'user'
+                feats_dict[neigh_ntype].append(model.get_user_feats([dgl_user_idx[1]])[0])
+            else:
+                feats_dict[neigh_ntype].append(feats[neigh_id][:features_size[neigh_ntype]])
     
     feats_dict[query_type] = [np.zeros(feats.shape[-1])]
     query_dgl_G = dgl.heterograph(edges_dict)

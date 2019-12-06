@@ -34,15 +34,24 @@ class HeteroRGCNLayer(nn.Module):
         return {ntype : G.nodes[ntype].data['h'] for ntype in G.ntypes}
 
 class HeteroRGCN(nn.Module):
-    def __init__(self, G, in_size = 256, hidden_size=128, out_size=64):
+    def __init__(self, G, in_size = 256, hidden_size=128, out_size=64, learn_feats=True):
         super(HeteroRGCN, self).__init__()
         # self.layer1 = HeteroRGCNLayer(in_size, hidden_size, G.etypes)
         # self.layer2 = HeteroRGCNLayer(hidden_size, out_size, G.etypes)
+        self.learn_feats = learn_feats
+        if self.learn_feats:
+            self.user_feats = nn.Parameter(torch.Tensor(G.number_of_nodes("user"), in_size), requires_grad=True)
+            nn.init.xavier_uniform_(self.user_feats)
         self.layer = HeteroRGCNLayer(G, out_size)
 
-    def forward(self, G, features_key="features"):
-        embed = nn.ParameterDict({ntype : nn.Parameter(G.nodes[ntype].data[features_key], requires_grad=False)
+    def get_user_feats(self, indexs):
+        return self.user_feats[indexs].detach().cpu().numpy()
+
+    def forward(self, G, features_key="features", learn_feats=True):
+        embed = nn.ParameterDict({ntype : nn.Parameter(G.nodes[ntype].data[features_key], requires_grad=False) 
+                        if  not (ntype == "user" and learn_feats and self.learn_feats) else self.user_feats
                           for ntype in G.ntypes})
+
         if next(self.parameters()).is_cuda:
             embed =embed.cuda()
         # h_dict = self.layer1(G, embed)

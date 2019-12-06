@@ -93,7 +93,7 @@ def load_data(dataset="flickr", features_key='features'):
     dgl_G = dgl.heterograph(edgetype_dict, num_nodes_dict={id2entityname[i]:len(node2id[i]) for i in range(number_of_types)})
     for nodetype in id2entityname.values():
         dgl_G.nodes[nodetype].data[features_key] = torch.FloatTensor(feats_dict[nodetype][:,:features_size[nodetype]])
-    return dgl_G, nx_G, nx2dgl_map, dgl2nx_map, id2content, content2id, feats
+    return dgl_G, nx_G, nx2dgl_map, dgl2nx_map, id2content, content2id, feats, features_size
 
 
 # class SAGEDataset():
