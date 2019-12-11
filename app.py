@@ -13,7 +13,7 @@ for ntype, content in tqdm(content2dglid, desc="Read keywords"):
       terms.append(content)
    elif ntype == 'user':
       users.append(content)
-   elif ntype == 'groups':
+   elif ntype == 'group':
       groups.append(content)
 
 
