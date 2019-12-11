@@ -94,7 +94,7 @@ class HeteroAttRGCNLayer(nn.Module):
                                 lambda nodes: self.reduce_func(nodes, (srctype, etype, dsttype)), etype=etype)
 
         for ntype in G.ntypes:
-            g.apply_nodes(lambda nodes: self.update_nodes(nodes), ntype=ntype)
+            G.apply_nodes(lambda nodes: self.update_nodes(nodes), ntype=ntype)
 
         # return the updated node feature dictionary
         return {ntype : G.nodes[ntype].data['h'] for ntype in G.ntypes}

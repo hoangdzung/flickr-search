@@ -19,7 +19,7 @@ for ntype, content in tqdm(content2dglid, desc="Read keywords"):
 groups = sorted(groups)
 users = sorted(users)
 terms = sorted(terms)
-
+terms=[]
 @app.route('/')
 def student():
    return render_template('home.html', terms=terms, users=users,groups=groups)

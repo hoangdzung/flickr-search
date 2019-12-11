@@ -13,7 +13,7 @@ dgl_G, nx_G, nx2dgl_map, dgl2nx_map, nxid2content, content2dglid, feats, feature
 isolate_nodes = set([node for node in nx.isolates(nx_G)])
 
 print("Load model...")
-model = HeteroRGCN(dgl_G, 256, 64, 32, True)
+model = HeteroRGCN(dgl_G, 256, 64, 32, True, True)
 
 #try:
 model.load_state_dict(torch.load(config.MODEL_PATH))
