@@ -1,26 +1,26 @@
-body {
-    margin: 0;
-    padding: 0;
-    display: block;
-}
-
 * {
     box-sizing: border-box;
 }
 
+body {
+  font: 16px Arial;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+
 .header
 {
-    height: 100%;
+    min-height: 100%;
     vertical-align: top;
-    /* background-image: linear-gradient(
-        rgba(0,0,0,0.5), rgba(0,0,0,0.5) 
-    ), url(../images/Hanoi_Adobe.jpg); */
     background: rgb(238,174,202);
     background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
     background-size: cover;
     background-position: center;
     display: flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
     font-family: sans-serif;
 }
@@ -40,67 +40,64 @@ a {
     color: #fff;
 }
 
-.search-field
-{
-    height: 50px;
+.input-box {
+    font-size: 12pt;
+    color: #444;
+    font-weight: bold;
+}
+
+.text-box {
+    margin: 0 0 0 10px;
     padding: 10px;
-    border: none;
-    /* border-radius: 15px; */
-    /* outline: none; */
+    border-radius: 10px;
+    width: 240px;
 }
 
-.category 
-{
-    width: 12.5%;
+.category {
+    width: 180px;
+    border-radius: 10px;
 }
 
-.keywords
-{
-    width: 23%;
-}
-
-form {
-    width: 80%;
-    text-align: center;
-}
-
-.search-btn
-{
-    height: 50px;
-    /* width: 100px; */
-    width: 12.5%;
-    background: #ffeb3b;
-    /* padding: 0px 25px; */
-    border: none;
-    color: #000;
-    text-align: center;
-    /* border-radius: 15px; */
+.search-btn {
+  width: 150px;
+  background: #ffeb3b;
+  border: none;
+  border-radius: 10px;
+  color: black;
+  font-weight: bold;
+  font-size: 12pt;
+  text-align: center;
+  margin: 0 0 0 10px;
 }
 
 .search-btn:hover {
-    background: #ffc107;
-    cursor: pointer;
+  background: #ffc107;
+  cursor: pointer;
 }
 
 .form-box {
-    background: rgba(0,0,0,0.5);
-    padding: 10px 5px;
-    text-align: center;
-    display: block;
-    position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  display: flex;
+  border-radius: 10px;
 }
 
-/* Paste this css to your style sheet file or under head tag */
-/* This only works with JavaScript, 
-if it's not present, don't show loader */
-.no-js #loader { display: none;  }
-.js #loader { display: block; position: absolute; left: 100px; top: 0; }
-.se-pre-con {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	background: url(http://smallenvelop.com/wp-content/uploads/2014/08/Preloader_11.gif) center no-repeat #fff;
+.autocomplete-items {
+  position: absolute;
+  width: 240px;
+  margin-left: 10px;
+}
+
+.autocomplete-item {
+  background-color: white;
+  padding: 8px;
+}
+
+.image {
+  width: 500px;
+}
+
+.image-list {
+  display: flex;
+  flex-direction: column;
 }
