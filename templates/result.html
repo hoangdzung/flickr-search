@@ -36,8 +36,8 @@
         </form>
         <div class="image-list">
             {% for src, url, title in data %}
-            <div style="text-align: center">
-                <img src={{src}} alt={{ title }} id={{i}} onclick="changeImage()" style="width:80%">
+            <div>
+                <img src={{src}} alt={{ title }} class="image">
                 <a href={{url}}>{{title}}</a>
             </div>
             {% endfor %}
