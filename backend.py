@@ -92,7 +92,7 @@ def content2nxid(ntype, content):
     except KeyError:
         return -1 
     else:
-        return dgl2nx_map[dgl_idx]
+        return dgl2nx_map[(ntype, dgl_idx)]
 
 def build_query_dgl_graph(query_type, neigh_dgl_idxs):
     edges_dict = defaultdict(list)
