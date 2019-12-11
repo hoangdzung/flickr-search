@@ -9,7 +9,7 @@ import numpy as np
 import config 
 
 features_key = "features"
-dgl_G, nx_G, nx2dgl_map, dgl2nx_map, id2content, content2id, feats, features_size = load_data(features_key=features_key)
+dgl_G, nx_G, nx2dgl_map, dgl2nx_map, nxid2content, content2dglid, feats, features_size = load_data(features_key=features_key)
 isolate_nodes = set([node for node in nx.isolates(nx_G)])
 
 print("Load model...")
@@ -40,7 +40,7 @@ def process(results):
     
     candidates_nx_id = get_candidates(query_embedding, query_type)
 
-    contents = [id2content[i] for i in candidates_nx_id]
+    contents = [nxid2content[i] for i in candidates_nx_id]
 
     return [('static/images/regular/{}.jpg'.format(content[0]), content[1], content[2]) for content in contents]
 
@@ -77,30 +77,36 @@ def parse_data(results):
 
 def content2nxid(ntype, content):
     content = content.lower().replace('"','').replace("'",'').strip()
+    # try:
+    #     nx_idx = content2id[content]
+    # except KeyError:
+    #     return -1 
+    # else:
+    #     dgl_idx = nx2dgl_map[nx_idx]
+    #     if dgl_idx[0] == ntype:
+    #         return nx_idx
+    #     else:
+    #         return -1
     try:
-        nx_idx = content2id[content]
+        dgl_idx = content2dglid[(ntype, content)]
     except KeyError:
         return -1 
     else:
-        dgl_idx = nx2dgl_map[nx_idx]
-        if dgl_idx[0] == ntype:
-            return nx_idx
-        else:
-            return -1
+        return dgl2nx_map[dgl_idx]
 
 def build_query_dgl_graph(query_type, neigh_dgl_idxs):
     edges_dict = defaultdict(list)
     feats_dict = defaultdict(list)
     for neigh_ntype in neigh_dgl_idxs:
-        for i, neigh_id in enumerate(neigh_dgl_idxs[neigh_ntype]):
+        for i, neigh_nx_id in enumerate(neigh_dgl_idxs[neigh_ntype]):
             edges_dict[(query_type, query_type+'-->'+neigh_ntype, neigh_ntype)].append((0,i))
             edges_dict[(neigh_ntype, neigh_ntype+'-->'+query_type, query_type)].append((i,0))
             if neigh_ntype == "user":
-                dgl_user_idx = nx2dgl_map[neigh_id]
+                dgl_user_idx = nx2dgl_map[neigh_nx_id]
                 assert dgl_user_idx[0] == 'user'
                 feats_dict[neigh_ntype].append(model.get_user_feats([dgl_user_idx[1]])[0])
             else:
-                feats_dict[neigh_ntype].append(feats[neigh_id][:features_size[neigh_ntype]])
+                feats_dict[neigh_ntype].append(feats[neigh_nx_id][:features_size[neigh_ntype]])
     
     feats_dict[query_type] = [np.zeros(features_size[query_type])]
     query_dgl_G = dgl.heterograph(edges_dict)

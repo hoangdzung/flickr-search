@@ -35,8 +35,8 @@ def load_data(dataset="flickr", features_key='features'):
 
     feats = np.load(feats_path)
     types = defaultdict(list)
-    id2content = {}
 
+    nxid2content = {}
     for node in tqdm(nx_G.nodes(), desc='Read node type'):
         node_type = nx_G.nodes[node]['label'][0]
         assert node_type in range(number_of_types)
@@ -44,17 +44,23 @@ def load_data(dataset="flickr", features_key='features'):
 
         content = nx_G.nodes[node]['content']
         if len(content) == 1:
-            id2content[node] = content[0].lower().replace('"','').replace("'",'').strip()
+            content = content[0].lower().replace('"','').replace("'",'').strip()
         elif len(content) == 2:
-            id2content[node] = (content[0], content[1]['url'], content[1]['title'])
+            content = (content[0], content[1]['url'], content[1]['title'])
+
+        nxid2content[node] = content
     
-    content2id = {v: k for k,v in id2content.items()}
     node2id = {}
     nx2dgl_map = {}
     for typeid in range(number_of_types):
         node2id[typeid] = {node:i for i, node in enumerate(types[typeid])}
         for i, node in enumerate(types[typeid]):
             nx2dgl_map[node] = (id2entityname[typeid],i)
+
+    content2dglid = {}
+    for nx_id, content in nxid2content.items():
+        ntype, dgl_id = nx2dgl_map[nx_id]
+        content2dglid[(ntype, content)] = dgl_id
 
     id2node = {}
     dgl2nx_map = {}
@@ -95,7 +101,7 @@ def load_data(dataset="flickr", features_key='features'):
     dgl_G = dgl.heterograph(edgetype_dict, num_nodes_dict={id2entityname[i]:len(node2id[i]) for i in range(number_of_types)})
     for nodetype in id2entityname.values():
         dgl_G.nodes[nodetype].data[features_key] = torch.FloatTensor(feats_dict[nodetype][:,:features_size[nodetype]])
-    return dgl_G, nx_G, nx2dgl_map, dgl2nx_map, id2content, content2id, feats, features_size
+    return dgl_G, nx_G, nx2dgl_map, dgl2nx_map, nxid2content, content2dglid, feats, features_size
 
 
 # class SAGEDataset():
