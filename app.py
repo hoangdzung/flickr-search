@@ -16,6 +16,9 @@ for ntype, content in tqdm(content2dglid, desc="Read keywords"):
    elif ntype == 'group':
       groups.append(content)
 
+groups = sorted(groups)
+users = sorted(users)
+terms = sorted(terms)
 
 @app.route('/')
 def student():
