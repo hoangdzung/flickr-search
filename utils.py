@@ -96,7 +96,9 @@ def load_data(dataset="flickr", features_key='features'):
         name1, name2 = id2entityname[nodetype1], id2entityname[nodetype2]
         edgetype_dict[(name1, id2relaname[(name1, name2)], name2)].append((nodeidx1, nodeidx2))
         edgetype_dict[(name2, id2relaname[(name2, name1)], name1)].append((nodeidx2, nodeidx1))
-        
+    
+    for typeid, node_type in id2entityname.items():
+        edgetype_dict[(node_type, node_type, node_type)] = [(i,i) for i in range(len(node2id[typeid]))]        
 
     dgl_G = dgl.heterograph(edgetype_dict, num_nodes_dict={id2entityname[i]:len(node2id[i]) for i in range(number_of_types)})
     for nodetype in id2entityname.values():
