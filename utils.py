@@ -49,7 +49,6 @@ def load_data(dataset="flickr", features_key='features'):
             id2content[node] = (content[0], content[1]['url'], content[1]['title'])
     
     content2id = {v: k for k,v in id2content.items()}
-
     node2id = {}
     nx2dgl_map = {}
     for typeid in range(number_of_types):
