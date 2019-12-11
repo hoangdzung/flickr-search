@@ -96,11 +96,13 @@ def content2nxid(ntype, content):
 
 def build_query_dgl_graph(query_type, neigh_dgl_idxs):
     edges_dict = defaultdict(list)
+    edges_dict[(query_type, query_type, query_type)].append((0,0))
     feats_dict = defaultdict(list)
     for neigh_ntype in neigh_dgl_idxs:
         for i, neigh_nx_id in enumerate(neigh_dgl_idxs[neigh_ntype]):
             edges_dict[(query_type, query_type+'-->'+neigh_ntype, neigh_ntype)].append((0,i))
             edges_dict[(neigh_ntype, neigh_ntype+'-->'+query_type, query_type)].append((i,0))
+            edges_dict[(neigh_ntype, neigh_ntype, neigh_ntype)].append((i,i))
             if neigh_ntype == "user":
                 dgl_user_idx = nx2dgl_map[neigh_nx_id]
                 assert dgl_user_idx[0] == 'user'
